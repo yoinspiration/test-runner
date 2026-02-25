@@ -1,0 +1,17 @@
+name: lock-test
+on:
+  workflow_dispatch:
+
+jobs:
+  board-lock-test:
+    runs-on: [self-hosted, linux, roc-rk3568-pc]
+    steps:
+      - name: Start
+        run: |
+          echo "START $(date -Iseconds)"
+          hostname
+      - name: Hold board for 120s
+        run: sleep 120
+      - name: End
+        run: |
+          echo "END $(date -Iseconds)"
