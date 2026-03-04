@@ -1,17 +1,37 @@
-name: lock-test
+name: board-lock-test
 on:
   workflow_dispatch:
 
 jobs:
-  board-lock-test:
+  # Job A：先占住板子一段时间
+  board-lock-holder:
     runs-on: [self-hosted, linux, roc-rk3568-pc]
     steps:
-      - name: Start
+      - name: Start holder
         run: |
-          echo "START $(date -Iseconds)"
+          echo "HOLDER START $(date -Iseconds)"
           hostname
-      - name: Hold board for 120s
-        run: sleep 120
-      - name: End
+      - name: Hold board for 300s
         run: |
-          echo "END $(date -Iseconds)"
+          echo "Holding board for 300s..."
+          sleep 300
+      - name: End holder
+        run: |
+          echo "HOLDER END $(date -Iseconds)"
+
+  # Job B：同时也要用同一块板，会在 pre-job-lock 里等待锁
+  board-lock-waiter:
+    runs-on: [self-hosted, linux, roc-rk3568-pc]
+    # 不写 needs，两个 job 可以并行调度；由于板子锁，只能串行执行
+    steps:
+      - name: Start waiter
+        run: |
+          echo "WAITER START $(date -Iseconds)"
+          hostname
+      - name: Short work
+        run: |
+          echo "Doing short work..."
+          sleep 30
+      - name: End waiter
+        run: |
+          echo "WAITER END $(date -Iseconds)"
