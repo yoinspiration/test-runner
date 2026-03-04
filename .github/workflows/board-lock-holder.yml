@@ -1,0 +1,19 @@
+name: board-lock-holder
+on:
+  workflow_dispatch:
+
+jobs:
+  board-lock-holder:
+    runs-on: [self-hosted, linux, roc-rk3568-pc]
+    steps:
+      - name: Start holder
+        run: |
+          echo "HOLDER START $(date -Iseconds)"
+          hostname
+      - name: Hold board for 300s
+        run: |
+          echo "Holding board for 300s..."
+          sleep 300
+      - name: End holder
+        run: |
+          echo "HOLDER END $(date -Iseconds)"

@@ -1,0 +1,19 @@
+name: board-lock-waiter
+on:
+  workflow_dispatch:
+
+jobs:
+  board-lock-waiter:
+    runs-on: [self-hosted, linux, roc-rk3568-pc]
+    steps:
+      - name: Start waiter
+        run: |
+          echo "WAITER START $(date -Iseconds)"
+          hostname
+      - name: Short work
+        run: |
+          echo "Doing short work..."
+          sleep 30
+      - name: End waiter
+        run: |
+          echo "WAITER END $(date -Iseconds)"
